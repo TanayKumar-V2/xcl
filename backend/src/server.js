@@ -28,9 +28,20 @@ app.use((err,req,res)=>{
     res.status(500).json({message:err.message || "Internal Server Error"})
 })
 
-connectDb()
+const startServer=async()=>{
+    try {
+        await connectDb()
 
+        if(ENV.NODE_ENV!=="production"){
+            app.listen(ENV.PORT,()=>{console.log("Server running on port:"+ENV.PORT)})
+        }
 
-app.listen(ENV.PORT,()=>{
-    console.log(`Listening at port: ${ENV.PORT}`)
-})
+    } catch (error) {
+        console.error("Failed to start server",error.message)
+        process.exit(1)
+    }
+}
+
+startServer()
+
+export default app
