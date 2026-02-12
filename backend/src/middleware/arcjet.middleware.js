@@ -25,12 +25,12 @@ export const arcJetMiddleware=async(req,res,next)=>{
             }
         }
 
-        if(decision.results.some((result)=>result.reason.isBot() && result.reason.isSpoofed())){
-            return res.status(403).json({
-                error:"Spoofed bot detected",
-                message:"malicious bot activity detected"
-            })
-        }
+        // if(decision.results.some((result)=>result.reason.isBot() && result.reason.isSpoofed())){
+        //     return res.status(403).json({
+        //         error:"Spoofed bot detected",
+        //         message:"malicious bot activity detected"
+        //     })
+        // }
         next()
     } catch (error) {
         console.error("Arcjet middleware error", error)

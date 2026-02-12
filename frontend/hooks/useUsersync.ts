@@ -15,8 +15,8 @@ export const useUserSync=()=>{
     })
 
     useEffect(()=>{
-        if(isSignedIn && syncUserMutation.data){
-            syncUserMutation.mutate
+        if(isSignedIn && !syncUserMutation.data){
+            syncUserMutation.mutate()
         }
     },[isSignedIn])
 

@@ -26,7 +26,7 @@ export const updateProfile=asyncHandler(async(req, res)=>{
     return res.status(200).json({user})
 })
 
-export const syncUser=asyncHandler(async()=>{
+export const syncUser=asyncHandler(async(req,res)=>{
     const {userId}=getAuth(req)
 
     const existingUser=await User.findOne({clerkId:userId})
@@ -46,7 +46,7 @@ export const syncUser=asyncHandler(async()=>{
 
     const user=await User.create(userData)
 
-    res.status(201).json({message:"user created successfully"})
+    return res.status(201).json({ user })
 })
 
 export const getCurrentUser=asyncHandler(async(req,res)=>{
