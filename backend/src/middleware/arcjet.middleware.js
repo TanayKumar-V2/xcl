@@ -7,6 +7,7 @@ export const arcJetMiddleware=async(req,res,next)=>{
         })
 
         if(decision.isDenied()){
+            console.log("Arcjet Denial Reason:", decision.reason)
             if(decision.reason.isRateLimit()){
                 return res.status(429).json({
                     error:"Too many requests",

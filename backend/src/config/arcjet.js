@@ -5,7 +5,7 @@ export const aj=arcjet({
     key:ENV.ARCJET_KEY,
     characteristics:["ip.src"],
     rules:[
-        shield({mode:"LIVE"}),
+        shield({mode:"DRY_RUN"}),
         detectBot({
             mode:"DRY_RUN",
             allow:[

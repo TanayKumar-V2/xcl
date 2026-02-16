@@ -3,7 +3,6 @@ import { useAuth } from "@clerk/clerk-expo"
 import { useMutation } from "@tanstack/react-query"
 import { useEffect } from "react"
 
-
 export const useUserSync=()=>{
     const{isSignedIn}=useAuth()
     const api=useApiClient()
@@ -15,7 +14,9 @@ export const useUserSync=()=>{
     })
 
     useEffect(()=>{
-        if(isSignedIn && !syncUserMutation.data){
+        // 1. Removed the .data check
+        // 2. Added () to mutate
+        if(isSignedIn && !syncUserMutation.isPending){
             syncUserMutation.mutate()
         }
     },[isSignedIn])
