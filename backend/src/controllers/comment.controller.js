@@ -6,11 +6,13 @@ import Post from '../models/post.model.js'
 import Notification from '../models/notification.model.js'
 
 export const getComments=asyncHandler(async(req,res)=>{
-    const{postid}=req.params
+    // FIX 1: Change postid to postId to match your route parameter
+    const{postId}=req.params
 
-    const comments=await Comment.find({post:postid})
+    const comments=await Comment.find({post:postId}) // Updated to postId
     .sort({createdAt:-1})
-    .populate("user","username firstName lastName profilePicture")
+    // FIX 2: Change username to userName to match the User model schema
+    .populate("user","userName firstName lastName profilePicture")
 
     res.status(200).json({comments})
 })
@@ -21,9 +23,12 @@ export const createComment=asyncHandler(async(req,res)=>{
     const{content}=req.body
 
     if(!content || content.trim()===""){
-        res.status(400).json({message:"Comment content is required"})
+        // FIX 3: Added 'return' to stop execution if there's no content
+        return res.status(400).json({message:"Comment content is required"})
     }
-    const user=await User.findOne({clerkId:userId})
+    
+    // FIX 4: Change clerkId to clerkID (Capital D)
+    const user=await User.findOne({clerkID:userId})
     const post=await Post.findById(postId)
 
     if(!user || !post){
@@ -57,7 +62,8 @@ export const deleteComment=asyncHandler(async(req,res)=>{
     const{userId}=getAuth(req)
     const{commentId}=req.params
 
-    const user=await User.findOne({clerkId:userId})
+    // FIX 5: Change clerkId to clerkID (Capital D)
+    const user=await User.findOne({clerkID:userId})
     const comment=await Comment.findById(commentId)
 
     if(!user || !comment){
