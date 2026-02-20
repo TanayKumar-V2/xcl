@@ -3,7 +3,7 @@ import multer from 'multer'
 const storage=multer.memoryStorage()
 
 const fileFilter=(req,file,cb)=>{
-    if(file.mimeType.startsWith("image/")){
+    if(file.mimetype.startsWith("image/")){
         cb(null,true)
     }else{
         cb(new Error("Only Image files are allowed"),false)
