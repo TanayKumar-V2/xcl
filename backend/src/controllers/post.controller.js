@@ -9,12 +9,13 @@ import Comment from '../models/comment.model.js'
 export const getPosts=asyncHandler(async(req,res)=>{
     const posts=await Post.find()
     .sort({createdAt:-1})
-    .populate("user","username firstName lastName profilePicture")
+    // Fixed: populated fields now use 'userName' to match the schema
+    .populate("user","userName firstName lastName profilePicture")
     .populate({
         path:"comments",
         populate:{
             path:"user",
-            select:"username firstName lastName profilePicture"
+            select:"userName firstName lastName profilePicture"
         }
     })
 
@@ -25,12 +26,13 @@ export const getPost=asyncHandler(async(req,res)=>{
     const {postId}=req.params
 
     const post=await Post.findById(postId)
-    .populate("user","username firstName lastName profilePicture")
+    // Fixed: populated fields now use 'userName'
+    .populate("user","userName firstName lastName profilePicture")
     .populate({
         path:"comments",
         populate:{
             path:"user",
-            select:"username firstName lastName profilePicture"
+            select:"userName firstName lastName profilePicture"
         }
     })
 
@@ -43,7 +45,8 @@ export const getPost=asyncHandler(async(req,res)=>{
 export const getUserPosts=asyncHandler(async(req,res)=>{
     const {username}=req.params
 
-    const user=await User.findOne({username})
+    // Fixed: search query to use 'userName'
+    const user=await User.findOne({userName: username})
 
     if(!user){
         return res.status(404).json({message:"User not found"})
@@ -51,12 +54,13 @@ export const getUserPosts=asyncHandler(async(req,res)=>{
 
     const posts=await Post.find({user:user._id})
     .sort({createdAt:-1})
-    .populate("user","username firstName lastName profilePicture")
+    // Fixed: populated fields now use 'userName'
+    .populate("user","userName firstName lastName profilePicture")
     .populate({
         path:"comments",
         populate:{
             path:"user",
-            select:"username firstName lastName profilePicture"
+            select:"userName firstName lastName profilePicture"
         }
     })
 
@@ -71,14 +75,18 @@ export const createPost=asyncHandler(async(req,res)=>{
     if(!content && !imageFile){
         return res.status(400).json({message:"Post must contain either content or image"})
     }
-    const user=await User.findOne({clerkId:userId})
+    
+    // Fixed: clerkId -> clerkID
+    const user=await User.findOne({clerkID:userId})
     if(!user){
         return res.status(404).json({message:"User not found"})
     }
+    
     let imageUrl=""
     if(imageFile){
         try {
-            const base64Image=`data${imageFile.mimetype};base64,${imageFile.buffer.toString(
+            // Fixed: Added missing colon in base64 string
+            const base64Image=`data:${imageFile.mimetype};base64,${imageFile.buffer.toString(
                 "base64"
             )}`
             const uploadResponse=await cloudinary.uploader.upload(base64Image,{
@@ -87,13 +95,15 @@ export const createPost=asyncHandler(async(req,res)=>{
                 transformation:[
                     {width:800,height:600,crop:"limit"},
                     {quality:'auto'},
-                    {formart:"auto"}
+                    // Fixed: formart -> format
+                    {format:"auto"} 
                 ]
             })
             imageUrl=uploadResponse.secure_url
         } catch (uploadError) {
             console.error("Cloudinary Upload error", uploadError)
-            res.status(400).json({message:"Failed to upload image"})
+            // Fixed: Added return to prevent continuing to create the post
+            return res.status(400).json({message:"Failed to upload image"})
         }
     }
     const post=await Post.create({
@@ -109,8 +119,10 @@ export const likePost=asyncHandler(async(req,res)=>{
     const {userId}=getAuth(req)
     const{postId}=req.params
 
-    const user=await User.findOne({clerkId:userId})
-    const post=await Post.findOne(postId)
+    // Fixed: clerkId -> clerkID
+    const user=await User.findOne({clerkID:userId})
+    // Fixed: findOne -> findById
+    const post=await Post.findById(postId)
 
     if(!user || !post){
         return res.status(404).json({error:"Post or user not found"})
@@ -145,15 +157,18 @@ export const deletePost=asyncHandler(async(req,res)=>{
     const{userId}=getAuth(req)
     const{postId}=req.params
 
-    const user=await User.findOne({clerId:userId})
-    const post=await Post.findOne(postId)
+    // Fixed: clerId -> clerkID
+    const user=await User.findOne({clerkID:userId})
+    // Fixed: findOne -> findById
+    const post=await Post.findById(postId)
 
     if(!user || !post){
         return res.status(404).json({error:"User or post not found"})
     }
 
     if(post.user.toString()!==user._id.toString()){
-        res.status(400).json({error:"You can only delete your posts"})
+        // Fixed: Added return and changed to 403 Forbidden
+        return res.status(403).json({error:"You can only delete your posts"})
     }
 
     await Comment.deleteMany({post:postId})
