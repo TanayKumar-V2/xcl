@@ -25,7 +25,7 @@ const ProfileScreens = () => {
     posts: userPosts,
     refetch: refetchPosts,
     isLoading: isRefetching,
-  } = usePosts(currentUser?.username);
+  } = usePosts(currentUser?.userName);
 
   const {
     isEditModalVisible,
@@ -105,7 +105,7 @@ const ProfileScreens = () => {
               </Text>
               <Feather name="check-circle" size={20} color="#1DA1F2" />
             </View>
-            <Text className="text-gray-500 mb-2">@{currentUser.username}</Text>
+            <Text className="text-gray-500 mb-2">@{currentUser.userName}</Text>
             <Text className="text-gray-900 mb-3">{currentUser.bio}</Text>
 
             <View className="flex-row items-center mb-2">

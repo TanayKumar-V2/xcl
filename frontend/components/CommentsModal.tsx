@@ -52,7 +52,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentsModalProps) => {
                   <Text className="font-bold text-gray-900 mr-1">
                     {selectedPost.user.firstName} {selectedPost.user.lastName}
                   </Text>
-                  <Text className="text-gray-500 ml-1">@{selectedPost.user.username}</Text>
+                  <Text className="text-gray-500 ml-1">@{selectedPost.user.userName}</Text>
                 </View>
 
                 {selectedPost.content && (
@@ -86,7 +86,7 @@ const CommentsModal = ({ selectedPost, onClose }: CommentsModalProps) => {
                     <Text className="font-bold text-gray-900 mr-1">
                       {comment.user.firstName} {comment.user.lastName}
                     </Text>
-                    <Text className="text-gray-500 text-sm ml-1">@{comment.user.username}</Text>
+                    <Text className="text-gray-500 text-sm ml-1">@{comment.user.userName}</Text>
                   </View>
 
                   <Text className="text-gray-900 text-base leading-5 mb-2">{comment.content}</Text>

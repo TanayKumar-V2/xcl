@@ -41,7 +41,7 @@ const PostCard = ({ currentUser, onDelete, onLike, post, isLiked, onComment }: P
                 {post.user.firstName} {post.user.lastName}
               </Text>
               <Text className="text-gray-500 ml-1">
-                @{post.user.username} · {formatDate(post.createdAt)}
+                @{post.user.userName} · {formatDate(post.createdAt)}
               </Text>
             </View>
             {isOwnPost && (
