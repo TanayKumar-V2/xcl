@@ -137,7 +137,7 @@ const ProfileScreens = () => {
           </View>
         </View>
 
-        <PostsList username={currentUser?.username} />
+        <PostsList username={currentUser?.userName} />
       </ScrollView>
 
       <EditProfileModal

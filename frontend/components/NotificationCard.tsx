@@ -68,7 +68,7 @@ const NotificationCard = ({ notification, onDelete }: NotificationCardProps) => 
                 <Text className="font-semibold">
                   {notification.from.firstName} {notification.from.lastName}
                 </Text>
-                <Text className="text-gray-500"> @{notification.from.username}</Text>
+                <Text className="text-gray-500"> @{notification.from.userName}</Text>
               </Text>
               <Text className="text-gray-700 text-sm mb-2">{getNotificationText()}</Text>
             </View>

@@ -26,7 +26,7 @@ export interface Post {
 export interface Notification {
   _id: string;
   from: {
-    username: string;
+    userName: string;
     firstName: string;
     lastName: string;
     profilePicture?: string;
