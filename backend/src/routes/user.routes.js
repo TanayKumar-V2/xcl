@@ -7,7 +7,7 @@ const router=Router()
 router.get('/profile/:username',getUserProfile)
 router.put('/profile',protectRoute,updateProfile)
 router.post('/sync',protectRoute,syncUser)
-router.post('/me',protectRoute,getCurrentUser)
+router.get('/me',protectRoute,getCurrentUser)
 router.post('/follow/:targetUserId',protectRoute,followUser)
 
 export default router
